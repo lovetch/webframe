@@ -8,7 +8,7 @@ import com.lovech.util.FormMap;
 /**
  * user实体表
  */
-@TableSeg(tableName = "frame_user", id="id")
+@TableSeg(tableName = "ly_user", id="id")
 public class UserFormMap extends FormMap<String,Object>{
 
 	/**

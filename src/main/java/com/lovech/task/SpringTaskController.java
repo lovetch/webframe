@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hyperic.sigar.Sigar;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -87,7 +88,7 @@ public class SpringTaskController {
 				+ "%</td><td>使用率超出  " + cpu + "%,,发送邮箱提示 </td></tr>" + "<tr " + rambool + "><td>服务器内存</td><td style=\"text-align: left;\">当前使用率：" + serverUsage + "%</td><td>使用率超出  " + ram + "%,发送邮箱提示 </td></tr>" + "<tr " + jvmbool + "><td>JVM内存</td><td style=\"text-align: left;\">当前使用率：" + JvmUsage
 				+ "%</td><td>使用率超出  " + jvm + "%,,发送邮箱提示 </td></tr>" + "</tbody>" + "</table>";
 		mark = mark.replaceAll("'","\"");
-		if (!Common.isEmpty(cpubool) || !Common.isEmpty(jvmbool) || !Common.isEmpty(rambool)) {
+		if (StringUtils.isNoneBlank(cpubool) || StringUtils.isNoneBlank(jvmbool) || StringUtils.isNoneBlank(rambool)) {
 			try {
 				EmailUtils.sendMail(prop.getProperty("fromEmail"), email, prop.getProperty("emailName"), prop.getProperty("emailPassword"), title, centent);
 				// 保存预警信息

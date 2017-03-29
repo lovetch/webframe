@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -57,7 +58,7 @@ public  class LogAopAction {
 			map=getControllerMethodDescription(point);
 			// 登录名
 			user = SecurityUtils.getSubject().getPrincipal().toString();
-			if (Common.isEmpty(user)) {
+			if (StringUtils.isNoneBlank(user)) {
 				user = "无法获取登录用户信息！";
 			}
 		} catch (Exception ee) {
@@ -102,7 +103,7 @@ public  class LogAopAction {
 		try {
 			// 登录名
 			user = SecurityUtils.getSubject().getPrincipal().toString();
-			if (Common.isEmpty(user)) {
+			if (StringUtils.isEmpty(user)) {
 				user = "无法获取登录用户信息！";
 			}
 		} catch (Exception e) {
@@ -162,7 +163,9 @@ public  class LogAopAction {
                 	 map.put("module", method.getAnnotation(SystemLog.class).module());
                 	 map.put("methods", method.getAnnotation(SystemLog.class).methods());
                 	 String de = method.getAnnotation(SystemLog.class).description();
-                	 if(Common.isEmpty(de))de="执行成功!";
+                	 if(StringUtils.isEmpty(de)){
+						 de="执行成功!";
+					 }
                 	 map.put("description", de);
                      break;
                 }

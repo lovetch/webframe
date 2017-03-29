@@ -15,6 +15,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.shiro.SecurityUtils;
@@ -42,14 +43,7 @@ import com.lovech.util.TreeObject;
 import com.lovech.util.TreeUtil;
 import com.mysql.jdbc.Connection;
 
-/**
- * 进行管理后台框架界面的类
- * 
- * @author lovech 2015-04-05
- * @Email: mmm333zzz520@163.com
- * @version 3.0v
- * @mod  Ekko 2015-09-07
- */
+
 @Controller
 @RequestMapping("/")
 public class BackgroundController extends BaseController {
@@ -75,7 +69,7 @@ public class BackgroundController extends BaseController {
 			if (!request.getMethod().equals("POST")) {
 				request.setAttribute("error", "支持POST方法提交！");
 			}
-			if (Common.isEmpty(username) || Common.isEmpty(password)) {
+			if (StringUtils.isEmpty(username)||StringUtils.isEmpty(password)) {
 				request.setAttribute("error", "用户名或密码不能为空！");
 				return "/login";
 			}

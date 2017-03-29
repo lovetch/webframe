@@ -7,6 +7,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -27,14 +28,14 @@ public class BaseController {
 	@Inject
 	private ResourcesMapper resourcesMapper;
 	
-	public PageView pageView = null;
+	protected PageView pageView = null;
 	public PageView getPageView(String pageNow,String pageSize,String orderby) {
-		if (Common.isEmpty(pageNow)) {
+		if (StringUtils.isEmpty(pageNow)) {
 			pageView = new PageView(1);
 		} else {
 			pageView = new PageView(Integer.parseInt(pageNow));
 		}
-		if (Common.isEmpty(pageSize)) {
+		if (StringUtils.isEmpty(pageSize)) {
 			pageSize = "10";
 		} 
 		pageView.setPageSize(Integer.parseInt(pageSize));
@@ -49,27 +50,12 @@ public class BaseController {
 		return t;
 	}
 	
-	/**
-	 * 获取返回某一页面的按扭组,
-	 * <br/>
-	 *<b>author：</b><br/> 
-	 *<b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsplanyuan</b><br/> 
-	 *<b>date：</b><br/> 
-	 *<b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp2015-04-01</b><br/> 
-	 *<b>mod by：</b><br/> 
-	 *<b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspEkko</b><br/> 
-	 *<b>date：</b><br/> 
-	 *<b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp2015-09-07</b><br/> 
-	 *<b>version：</b><br/> 
-	 *<b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp3.0v</b>
-	 * @return Class<T>
-	 * @throws Exception
-	 */
+
 	public List<ResFormMap> findByRes(){
 		// 资源ID
 		String id = getPara("id");
 		// 获取request
-		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();  
+		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
 		// 通过工具类获取当前登录的bean
 		UserFormMap userFormMap = (UserFormMap)Common.findUserSession(request);
 		// user id
@@ -81,28 +67,28 @@ public class BaseController {
 		//List<ResFormMap> rse = resourcesMapper.findByAttribute("parentId", id, ResFormMap.class);
 		for (ResFormMap resFormMap : rse) {
 			Object o =resFormMap.get("description");
-			if(o!=null&&!Common.isEmpty(o.toString())){
+			if(o!=null&&StringUtils.isNoneBlank(o.toString())){
 				resFormMap.put("description",Common.stringtohtml(o.toString()));
 			}
 		}
 		return rse;
 	}
-	
+
 	/**
 	 * 获取页面传递的某一个参数值,
 	 * <br/>
-	 *<b>author：</b><br/> 
-	 *<b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsplanyuan</b><br/> 
-	 *<b>date：</b><br/> 
-	 *<b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp2015-04-01</b><br/> 
-	 *<b>version：</b><br/> 
+	 *<b>author：</b><br/>
+	 *<b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsplanyuan</b><br/>
+	 *<b>date：</b><br/>
+	 *<b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp2015-04-01</b><br/>
+	 *<b>version：</b><br/>
 	 *<b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp3.0v</b>
 	 */
 	public String getPara(String key){
-		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();  
+		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
 		return request.getParameter(key);
 	}
-	
+
 	/**
 	 * 获取页面传递的某一个数组值,
 	 * <br/>
@@ -177,7 +163,7 @@ public class BaseController {
 					}
 				}else{
 					String as = request.getParameter(nms);
-					if(!Common.isEmpty(as)){
+					if(StringUtils.isNoneBlank(as)){
 						String mname = t.getClass().getSimpleName().toUpperCase();
 						if(nms.toUpperCase().startsWith(mname)){
 							nms=nms.substring(mname.length()+1);
@@ -188,7 +174,7 @@ public class BaseController {
 					}
 				}
 			}
-			if(!Common.isEmpty(order) && !Common.isEmpty(sort))
+			if(StringUtils.isNoneBlank(order) && StringUtils.isNoneBlank(sort))
 				map.put("orderby", " order by " + order + " " + sort);
 		} catch (InstantiationException e) {
 			e.printStackTrace();
@@ -230,7 +216,7 @@ public class BaseController {
 						}
 					}else{
 						String as = request.getParameter(nms);
-						if(!Common.isEmpty(as)){
+						if(StringUtils.isNoneBlank(as)){
 							map.put( nms, as);
 						}
 					}

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -238,16 +239,16 @@ public class ResourcesController extends BaseController {
 		String userId = "";
 		String u = getPara("userId");
 		String g = getPara("roleId");
-		if (null != u && !Common.isEmpty(u.toString())) {
+		if (null != u && StringUtils.isNoneBlank(u.toString())) {
 			userId = u.toString();
-		} else if (null != g && !Common.isEmpty(g.toString())) {
+		} else if (null != g && StringUtils.isNoneBlank(g.toString())) {
 			List<UserGroupsFormMap> gs = resourcesMapper.findByAttribute("roleId", g.toString(), UserGroupsFormMap.class);
 			for (UserGroupsFormMap ug : gs) {
 				userId += ug.get("userId") + ",";
 			}
 		}
 		userId = Common.trimComma(userId);
-		if(Common.isEmpty(userId)){
+		if(StringUtils.isEmpty(userId)){
 			return "分配失败,该角色下没有用户!";
 		}
 		String[] users = userId.split(",");

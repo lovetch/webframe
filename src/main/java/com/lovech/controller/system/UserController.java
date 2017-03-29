@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -39,7 +40,7 @@ import com.lovech.util.PasswordHelper;
 public class UserController extends BaseController {
 	@Inject
 	private UserMapper userMapper;
-	
+
 	@RequestMapping("list")
 	public String listUI(Model model) throws Exception {
 		model.addAttribute("res", findByRes());
@@ -94,7 +95,7 @@ public class UserController extends BaseController {
 			userFormMap.set("password","123456789");
 			passwordHelper.encryptPassword(userFormMap);
 			userMapper.addEntity(userFormMap);//新增后返回新增信息
-			if (!Common.isEmpty(txtGroupsSelect)) {
+			if (StringUtils.isNoneBlank(txtGroupsSelect)) {
 				String[] txt = txtGroupsSelect.split(",");
 				UserGroupsFormMap userGroupsFormMap = new UserGroupsFormMap();
 				for (String roleId : txt) {
@@ -141,7 +142,7 @@ public class UserController extends BaseController {
 		userFormMap.put("txtGroupsSelect", txtGroupsSelect);
 		userMapper.editEntity(userFormMap);
 		userMapper.deleteByAttribute("userId", userFormMap.get("id")+"", UserGroupsFormMap.class);
-		if(!Common.isEmpty(txtGroupsSelect)){
+		if(StringUtils.isNoneBlank(txtGroupsSelect)){
 			String[] txt = txtGroupsSelect.split(",");
 			for (String roleId : txt) {
 				UserGroupsFormMap userGroupsFormMap = new UserGroupsFormMap();
